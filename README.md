@@ -18,8 +18,9 @@ output wire mem_wb_ena
 ```verilog
 input wire clk,
 input wire reset,
+input wire we, // Src: 1'b1
 
-input wire[31:0] pc_in, // Src: is_branch(ID) ? BranchProc.branch_pc(ID) : pc_out + 4(IF)
+input wire[31:0] pc_in, // BranchProc.branch_pc(ID)
 
 output reg[31:0] pc_out
 ```

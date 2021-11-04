@@ -8,7 +8,7 @@ Function :
 
 */
 
-module PipelineCtrl (
+module PipelineController (
     input wire clk,
     input wire reset,
     input wire ena,
