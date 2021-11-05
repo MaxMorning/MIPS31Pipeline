@@ -34,6 +34,9 @@ module soc_tb();
         .system_ena(system_ena)
     );
 
+    assign pc = soc.core0.mem_pc_out;
+    assign inst = soc.core0.mem_instr_out;
+
     initial begin
         clk = 0;
         forever begin
@@ -45,17 +48,16 @@ module soc_tb();
         $dumpfile("result.vcd");
         $dumpvars(5);
 
-        $readmemh("../MIPS/WORKSPACE/instr.txt", soc.imem_inst.inst_array);
-        $readmemh("../MIPS/DMEM.txt", soc.dmem_inst.data_array);
-        fout = $fopen("../MIPS/WORKSPACE/result.txt", "w+");
+        $readmemh("./MIPS/WORKSPACE/instr.txt", soc.imem_inst.inst_array);
+        $readmemh("./MIPS/DMEM.txt", soc.dmem_inst.data_array);
+        fout = $fopen("./MIPS/WORKSPACE/result.txt", "w+");
         reset = 0;
-        system_ena = 0;
-        #6
-        reset = 1;
         system_ena = 1;
+        #3
+        reset = 1;
 
-        #6;
-        for (check_loop = 0; check_loop < 256; check_loop = check_loop + 1) begin
+        #49;
+        for (check_loop = 0; check_loop < 512; check_loop = check_loop + 1) begin
             $fdisplay(fout, "pc: %h", pc);
             $fdisplay(fout, "instr: %h", inst);
 

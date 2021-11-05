@@ -1,7 +1,11 @@
 /MIPS/WORKSPACE
+/MIPS/HEX
+/MIPS/MARSRES
+/MIPS/TEMP
+/MIPS/ASM
 
-.DS_Store
 .DS_Store
 
 *.sml
 *.vcd
+.DS_Store

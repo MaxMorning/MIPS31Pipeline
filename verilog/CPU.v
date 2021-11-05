@@ -174,7 +174,7 @@ module CPU (
         .instr(id_instr_out),
         .GPR_rs_data(id_valid_rs_data),
         .GPR_rt_data(id_valid_rt_data),
-        .pc(id_pc_out),
+        .delay_slot_pc(if_pc_out),
 
         .is_branch(id_should_branch),
         .branch_pc(id_branch_pc)

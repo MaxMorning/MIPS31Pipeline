@@ -13,6 +13,7 @@ if __name__ == '__main__':
 
     print("Compile Done!")
     file_names = os.listdir(hex_path)
+    file_names.sort()
     print(file_names)
     is_wrong = False
     for file_name in file_names:
@@ -24,10 +25,9 @@ if __name__ == '__main__':
                     file_content = file_src.read()
                     file_dst.write(file_content)
 
-            # start simulation
-            os.system(r'simulate.sml')
-            # os.system(r'quit -sim')
-            # os.system(r'quit')
+            os.system(r'./simulate.sml')
+
+            print("Simulate done.")
 
             # compare
             # is_wrong = false
@@ -42,12 +42,24 @@ if __name__ == '__main__':
                     standard = standard.replace(' ', '')
                     standard = standard.replace('\n', '')
 
-                    for index in range(len(standard)):
+
+                    index = 0
+                    while True:
+                        if index >= len(standard):
+                            break
+                        
+                        if standard[index:index + 2] == 'pc':
+                            index += 25
+                            continue
+                        
                         if standard[index] != result[index]:
                             print(file_name, " Wrong!")
                             is_wrong = True
                             break
+                        
+                        index += 1
 
+            print("\n\n")
             if is_wrong:
                 break
 

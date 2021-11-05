@@ -21,8 +21,8 @@ module MEM_WB_reg (
     Mux4 gpr_wdata_select_inst(
         .in0(mem_dmem_rdata_in),
         .in1(mem_alu_result_in),
-        .in2(mem_pc_in),
-        .in3(mem_pc_in),
+        .in2(mem_pc_in + 8),
+        .in3(32'hffffffff),
         .sel(mem_GPR_wdata_select_in),
 
         .out(gpr_wdata)

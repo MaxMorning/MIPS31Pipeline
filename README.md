@@ -115,7 +115,7 @@ output wire[31:0] rt_valid_data
 input wire[31:0] instr, // Src: Instr(ID)
 input wire[31:0] GPR_rs_data, // Src: RegFile.rdata1(ID)
 input wire[31:0] GPR_rt_data, // Src: RegFile.rdata2(ID)
-input wire[31:0] pc, // Src: IF_ID_reg.pc_out(ID)
+input wire[31:0] delay_slot_pc, // Src: PC.pc_out(IF)
 
 output wire is_branch,
 output wire[31:0] branch_pc

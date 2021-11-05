@@ -13,7 +13,7 @@ module SoC (
     wire DMEM_we;
 
     IMEM imem_inst(
-        .a(IMEM_raddr),
+        .a(IMEM_raddr[31:2]),
 
         .spo(IMEM_rdata)
     );

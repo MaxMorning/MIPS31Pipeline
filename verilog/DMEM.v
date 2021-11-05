@@ -6,7 +6,7 @@ module DMEM (
     
     output wire[31:0] rdata
 );
-    reg[31:0] data_array[255:0];
+    reg[31:0] data_array[0:255];
     assign rdata = data_array[addr[9:2]];
 
     always @(posedge clk) begin
