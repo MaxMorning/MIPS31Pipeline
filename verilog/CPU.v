@@ -55,6 +55,10 @@ module CPU (
 
     wire exe_alu_overflow;
 
+    wire[31:0] exe_valid_alu_opr1;
+    wire[31:0] exe_valid_alu_opr2;
+    wire[31:0] exe_valid_rt_data;
+
     // MEM
     wire mem_GPR_we;
     wire[4:0] mem_GPR_waddr;
@@ -210,9 +214,26 @@ module CPU (
         .exe_instr_out(exe_instr_out)
     );
 
+    EXE_load_alu_ByPassProc exe_load_bypass_proc_inst(
+        .mem_ena(exe_mem_ena),
+        .mem_rt_addr_in(mem_instr_out[20:16]),
+        .mem_GPR_wdata_select_in(mem_GPR_wdata_select),
+        .mem_load_data(mem_mem_rdata),
+
+        .exe_instr_in(exe_instr_out),
+
+        .ori_alu_opr1(exe_alu_opr1),
+        .ori_alu_opr2(exe_alu_opr2),
+        .ori_rt_data(exe_GPR_rt_out),
+
+        .valid_alu_opr1(exe_valid_alu_opr1),
+        .valid_alu_opr2(exe_valid_alu_opr2),
+        .valid_rt_data(exe_valid_rt_data)
+    );
+
     ALU alu_inst(
-        .opr1(exe_alu_opr1),
-        .opr2(exe_alu_opr2),
+        .opr1(exe_valid_alu_opr1),
+        .opr2(exe_valid_alu_opr2),
         .ALUControl(exe_alu_contorl),
 
         .ALUResult(exe_alu_result),
@@ -227,7 +248,7 @@ module CPU (
 
         .exe_instr_in(exe_instr_out),
         .exe_pc_in(exe_pc_out),
-        .exe_GPR_rt_in(exe_GPR_rt_out),
+        .exe_GPR_rt_in(exe_valid_rt_data),
         .exe_alu_result(exe_alu_result),
 
         .exe_GPR_we_in(exe_GPR_we),
