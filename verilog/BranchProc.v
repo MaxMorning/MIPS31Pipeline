@@ -4,6 +4,7 @@ module BranchProc (
     input wire[31:0] GPR_rt_data, // Src: RegFile.rdata2(ID)
     input wire[31:0] delay_slot_pc, // Src: PC.pc_out(IF)
 
+    output wire id_is_branch_instr,
     output wire is_branch,
     output wire[31:0] branch_pc
 );
@@ -14,6 +15,8 @@ module BranchProc (
     wire should_branch = (|(GPR_rs_data ^ GPR_rt_data)) ^~ instr[26];
     
     assign is_branch = is_jump_instr | is_jump_register | (is_branch_instr & should_branch);
+
+    assign id_is_branch_instr = is_branch_instr;
 
     wire[31:0] branch_instr_pc_offset = is_branch_instr & should_branch ? {{15{instr[15]}}, instr[14:0], 2'b00} : 32'h4;
 

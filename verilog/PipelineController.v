@@ -22,7 +22,7 @@ module PipelineController (
 
     always @(posedge clk or negedge reset) begin
         if (!reset) begin
-            pipeline_status <= {3'b000, ena};
+            pipeline_status <= 4'b0001;
         end
         else begin
             pipeline_status[0] <= ena;

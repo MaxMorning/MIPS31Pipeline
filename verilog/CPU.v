@@ -12,6 +12,7 @@ module CPU (
     output wire DMEM_we
 );
 
+    wire load_branch_conflict;
     wire if_id_ena;
     wire id_exe_ena;
     wire exe_mem_ena;
@@ -30,6 +31,8 @@ module CPU (
     wire[1:0] id_GPR_wdata_select;
     wire[31:0] id_pc_out;
     wire[31:0] id_instr_out;
+
+    wire id_is_branch_instr;
 
     wire[31:0] id_ori_rs_data;
     wire[31:0] id_ori_rt_data;
@@ -77,6 +80,12 @@ module CPU (
     wire[31:0] wb_GPR_wdata;
 
 
+    assign load_branch_conflict = (if_id_ena & id_is_branch_instr) // instr in ID is a branch instr
+                                    &
+                                    (id_exe_ena & exe_GPR_we & ~(| exe_GPR_wdata_select))// instr in EXE is a load instr
+                                    & ((exe_instr_out[20:16] == id_instr_out[25:21]) | (exe_instr_out[20:16] == id_instr_out[20:16])) // instrs in ID and EXE have WaR hazard, should stall
+                                    ;
+
     assign if_imem_rdata = IMEM_rdata;
     assign mem_mem_rdata = DMEM_rdata;
 
@@ -101,7 +110,7 @@ module CPU (
     PC pc_inst(
         .clk(clk),
         .reset(reset),
-        .we(1'b1),
+        .we(~load_branch_conflict), // this is for solving branch after load conflict
 
         .pc_in(id_should_branch ? id_branch_pc : if_pc_out + 4),
 
@@ -112,7 +121,7 @@ module CPU (
     IF_ID_reg if_id_reg_inst(
         .clk(clk),
         .reset(reset),
-        .ena(if_id_ena),
+        .ena(if_id_ena & ~load_branch_conflict),
 
         .if_pc_in(if_pc_out),
         .if_instr_in(if_imem_rdata),
@@ -180,6 +189,7 @@ module CPU (
         .GPR_rt_data(id_valid_rt_data),
         .delay_slot_pc(if_pc_out),
 
+        .id_is_branch_instr(id_is_branch_instr),
         .is_branch(id_should_branch),
         .branch_pc(id_branch_pc)
     );
@@ -191,7 +201,7 @@ module CPU (
         .reset(reset),
         .ena(id_exe_ena),
 
-        .id_instr_in(id_instr_out),
+        .id_instr_in(load_branch_conflict ? 32'h0 : id_instr_out), // this mux is for solving branch after load conflict
         .id_pc_in(id_pc_out),
 
         .ext_result_in(id_ext_result),

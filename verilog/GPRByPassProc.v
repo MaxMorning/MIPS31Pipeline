@@ -52,7 +52,7 @@ module GPRByPassProc(
     reg[31:0] rs_valid_data_reg;
 
     always @(*) begin
-        if (EXE_rd == rs_addr && EXE_rd != 5'h0 && EXE_is_wb)
+        if (EXE_rd == rs_addr && EXE_rd != 5'h0 && exe_actual_we)
             rs_valid_data_reg = exe_actual_result;
         else if (MEM_rd == rs_addr && MEM_rd != 5'h0 && MEM_is_wb)
             rs_valid_data_reg = mem_actual_result;
@@ -68,7 +68,7 @@ module GPRByPassProc(
     reg[31:0] rt_valid_data_reg;
 
     always @(*) begin
-        if (EXE_rd == rt_addr && EXE_rd != 5'h0 && EXE_is_wb)
+        if (EXE_rd == rt_addr && EXE_rd != 5'h0 && exe_actual_we)
             rt_valid_data_reg = exe_actual_result;
         else if (MEM_rd == rt_addr && MEM_rd != 5'h0 && MEM_is_wb)
             rt_valid_data_reg = mem_actual_result;
