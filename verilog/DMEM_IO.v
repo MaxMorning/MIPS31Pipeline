@@ -1,4 +1,4 @@
-module DMEM (
+module DMEM_io (
     input wire clk,
     input wire we,
     input wire[31:0] addr,

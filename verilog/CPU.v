@@ -76,8 +76,10 @@ module CPU (
 
     // WB
     wire wb_GPR_we;
+    wire[1:0] wb_GPR_wdata_select;
     wire[4:0] wb_GPR_waddr;
-    wire[31:0] wb_GPR_wdata;
+    wire[31:0] wb_GPR_wdata_not_lw;
+    wire[31:0] wb_GPR_wdata_final;
 
 
     assign load_branch_conflict = (if_id_ena & id_is_branch_instr) // instr in ID is a branch instr
@@ -90,8 +92,8 @@ module CPU (
     assign mem_mem_rdata = DMEM_rdata;
 
     assign IMEM_raddr = if_pc_out;
-    // assign DMEM_addr = mem_alu_result;
-    assign DMEM_addr = exe_alu_result; // for block memory
+    assign DMEM_addr = mem_alu_result;
+    // assign DMEM_addr = exe_alu_result; // for block memory, cause time looping
     assign DMEM_wdata = mem_GPR_rt_out;
     assign DMEM_we = mem_mem_we;
 
@@ -143,7 +145,7 @@ module CPU (
         .raddr2(id_instr_out[20:16]),
 
         .waddr(wb_GPR_waddr),
-        .wdata(wb_GPR_wdata),
+        .wdata(wb_GPR_wdata_final),
 
         .rdata1(id_ori_rs_data),
         .rdata2(id_ori_rt_data)
@@ -172,7 +174,7 @@ module CPU (
 
         .WB_is_wb(wb_GPR_we),
         .WB_rd(wb_GPR_waddr),
-        .WB_result(wb_GPR_wdata),
+        .WB_result(wb_GPR_wdata_final),
 
         .rs_addr(id_instr_out[25:21]),
         .rs_data(id_ori_rs_data),
@@ -293,7 +295,10 @@ module CPU (
         .mem_GPR_wdata_select_in(mem_GPR_wdata_select),
 
         .wb_GPR_we(wb_GPR_we),
+        .wb_GPR_wdata_select_out(wb_GPR_wdata_select),
         .wb_GPR_waddr(wb_GPR_waddr),
-        .wb_GPR_wdata(wb_GPR_wdata)
+        .wb_GPR_wdata_not_lw(wb_GPR_wdata_not_lw)
     );
+
+    assign wb_GPR_wdata_final = (| wb_GPR_wdata_select) ? wb_GPR_wdata_not_lw : mem_mem_rdata;
 endmodule

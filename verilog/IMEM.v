@@ -1,5 +1,5 @@
 module IMEM (
-    input wire[31:0] a,
+    input wire[29:0] a,
 
     output wire[31:0] spo
 );

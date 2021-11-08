@@ -1,4 +1,4 @@
-module SoC (
+module SoC_io (
     input wire base_clk,
     input wire[7:0] opr1,
     input wire[7:0] opr2,
