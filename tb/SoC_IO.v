@@ -14,6 +14,7 @@ module SoC (
 
     wire[31:0] IMEM_raddr;
     wire[31:0] DMEM_addr;
+    wire[31:0] fetch_DMEM_addr;
     wire[31:0] DMEM_wdata;
     wire DMEM_we;
 
@@ -27,7 +28,8 @@ module SoC (
     DMEM dmem_inst(
         .clk(clk_cpu),
         .we(DMEM_we),
-        .addr(DMEM_addr),
+        .ask_addr(DMEM_addr),
+        .fetch_addr(fetch_DMEM_addr),
         .wdata(DMEM_wdata),
 
         .rdata(DMEM_rdata),
@@ -47,6 +49,7 @@ module SoC (
 
         .IMEM_raddr(IMEM_raddr),
         .DMEM_addr(DMEM_addr),
+        .fetch_DMEM_addr(fetch_DMEM_addr),
         .DMEM_wdata(DMEM_wdata),
         .DMEM_we(DMEM_we)
     );

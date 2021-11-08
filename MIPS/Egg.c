@@ -27,6 +27,8 @@ int main()
     // egg_sum * (floor_sum + 1) * 4 stack base of main
     __asm__ (
         "lui $t0, 0x8000\t\n" // t0 is the base addr of I/O
+        "addi $t1, $0, 0xffff\t\n"
+        "sw $t1, 0x8($t0)\t\n" // display ffff when calc not done
         "lw %[egg_sum_reg], 0($t0)\t\n"
         "lw %[floor_sum_reg], 4($t0)\t\n"
         // "addi %[dp_array_reg], $0, 0xc\t\n"

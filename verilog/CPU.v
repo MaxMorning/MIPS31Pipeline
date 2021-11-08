@@ -8,6 +8,7 @@ module CPU (
 
     output wire[31:0] IMEM_raddr,
     output wire[31:0] DMEM_addr,
+    output wire[31:0] fetch_DMEM_addr,
     output wire[31:0] DMEM_wdata,
     output wire DMEM_we
 );
@@ -90,10 +91,11 @@ module CPU (
     assign mem_mem_rdata = DMEM_rdata;
 
     assign IMEM_raddr = if_pc_out;
-    // assign DMEM_addr = mem_alu_result;
+    assign fetch_DMEM_addr = mem_alu_result;
     assign DMEM_addr = exe_alu_result; // for block memory
-    assign DMEM_wdata = mem_GPR_rt_out;
-    assign DMEM_we = mem_mem_we;
+    assign DMEM_wdata = exe_GPR_rt_out; // for block memory
+    wire exe_mem_we = id_exe_ena & exe_instr_out[31] & exe_instr_out[29];
+    assign DMEM_we = exe_mem_we; // for block memory
 
     PipelineController pipeline_ctrl_inst(
         .clk(clk),
