@@ -90,7 +90,8 @@ module CPU (
     assign mem_mem_rdata = DMEM_rdata;
 
     assign IMEM_raddr = if_pc_out;
-    assign DMEM_addr = mem_alu_result;
+    // assign DMEM_addr = mem_alu_result;
+    assign DMEM_addr = exe_alu_result; // for block memory
     assign DMEM_wdata = mem_GPR_rt_out;
     assign DMEM_we = mem_mem_we;
 

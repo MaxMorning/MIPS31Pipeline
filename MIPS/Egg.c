@@ -24,6 +24,7 @@ int main()
     // 0x8000 0004  floor_sum
     // 0x8000 0008  result
     // 0x0000 0000  addr of dp_array[0]
+    // egg_sum * (floor_sum + 1) * 4 stack base of main
     __asm__ (
         "lui $t0, 0x8000\t\n" // t0 is the base addr of I/O
         "lw %[egg_sum_reg], 0($t0)\t\n"
@@ -45,6 +46,7 @@ int main()
         "j COMPARE\t\n"
         // "nop\t\n" delay slot will be added by compiler
         "FINISH_ASM:\t\n"
+        "addi $s8, $t2, 0x0\t\n" // set s8 as stack pointer (GCC likes it)
         : // output
         [egg_sum_reg]"=r"(egg_sum),
         [floor_sum_reg]"=r"(floor_sum)
