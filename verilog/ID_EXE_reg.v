@@ -59,6 +59,7 @@ module ID_EXE_reg (
 
     // ALU control signal v2.0
     /*
+        0000 : movz
         0001 : movn
 
         0010 : add
@@ -159,6 +160,11 @@ module ID_EXE_reg (
                     begin
                         alu_control_reg = 4'b0001;
                     end
+
+                    6'b001010: // movz
+                    begin
+                        alu_control_reg = 4'b0000;
+                    end
                     default: // invalid
                     begin
                         alu_control_reg = 4'b0000;
@@ -208,7 +214,7 @@ module ID_EXE_reg (
             end
             default: // invalid
             begin
-                alu_control_reg = 4'b0000;
+                alu_control_reg = 4'b0110; // assume not_change signal from ALU is not 1
             end
         endcase
     end

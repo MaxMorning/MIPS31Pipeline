@@ -9,6 +9,7 @@ module ALU (
 );
 
     /*
+        0000 : movz
         0001 : movn
 
         0010 : add
@@ -63,6 +64,7 @@ module ALU (
     
     always @(*) begin
         case (ALUControl)
+            4'b0000, // movz
             4'b0001: // movn
             begin
                 alu_result_reg = movnResult;
@@ -146,8 +148,9 @@ module ALU (
     end
 
     wire not_change_movn = (ALUControl == 4'b0001 & opr2 == 0);
+    wire not_change_movz = (ALUControl == 4'b0000 & opr2 != 0);
     wire not_change_add_overflow = ALUControl == 4'b0010 & (addResult[32] ^ addResult[31]);
     wire not_change_sub_overflow = ALUControl == 4'b0100 & (subResult[32] ^ subResult[31]);
 
-    assign not_change = not_change_movn | not_change_add_overflow | not_change_sub_overflow;
+    assign not_change = not_change_movn | not_change_movz | not_change_add_overflow | not_change_sub_overflow;
 endmodule
