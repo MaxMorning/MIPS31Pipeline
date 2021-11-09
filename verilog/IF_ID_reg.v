@@ -28,7 +28,7 @@ module IF_ID_reg (
     assign ExtSelect_out[0] = id_instr_out[29] ^ id_instr_out[28];
 
     assign id_GPR_we = ena & (
-                        ~((~id_instr_out[29] & ~id_instr_out[28] & ~id_instr_out[27] & ~id_instr_out[26] & ~id_instr_out[5] & id_instr_out[3])
+                        ~((~id_instr_out[29] & ~id_instr_out[28] & ~id_instr_out[27] & ~id_instr_out[26] & ~id_instr_out[5] & id_instr_out[3] & ~id_instr_out[0])
                          |
                          (id_instr_out[31] & id_instr_out[29] & ~id_instr_out[28] & id_instr_out[27] & id_instr_out[26])
                          |

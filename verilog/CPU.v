@@ -57,7 +57,7 @@ module CPU (
 
     wire[31:0] exe_GPR_rt_out;
 
-    wire exe_alu_overflow;
+    wire exe_alu_not_change;
 
     wire[31:0] exe_valid_alu_opr1;
     wire[31:0] exe_valid_alu_opr2;
@@ -250,7 +250,7 @@ module CPU (
         .ALUControl(exe_alu_contorl),
 
         .ALUResult(exe_alu_result),
-        .overflow(exe_alu_overflow)
+        .not_change(exe_alu_not_change)
     );
 
     // MEM
@@ -264,7 +264,7 @@ module CPU (
         .exe_GPR_rt_in(exe_valid_rt_data),
         .exe_alu_result(exe_alu_result),
 
-        .exe_GPR_we_in(exe_GPR_we),
+        .exe_GPR_we_in(exe_GPR_we & ~exe_alu_not_change),
         .exe_GPR_waddr_in(exe_GPR_waddr),
         .exe_GPR_wdata_select_in(exe_GPR_wdata_select),
 

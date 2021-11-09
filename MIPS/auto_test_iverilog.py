@@ -53,7 +53,8 @@ if __name__ == '__main__':
                             continue
                         
                         if standard[index] != result[index]:
-                            print(file_name, " Wrong!")
+                            print(file_name, " Wrong! @ ", index)
+                            print(result[index - 7:index + 256])
                             is_wrong = True
                             break
                         
